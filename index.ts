@@ -47,7 +47,8 @@ if (!true) {
   /* eslint-enable @typescript-eslint/no-unused-vars */
 }
 
-type DependencyList = Memo<never>[]
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type DependencyList = Memo<any>[]
 
 const useMemo: <A>(f: () => A, dependencies: DependencyList) => Memo<A> =
   React.useMemo as never
@@ -99,7 +100,7 @@ const overrides = {
   useRef
 }
 
-type Hidden = Omit<typeof React, 'useMemo'>
+type Hidden = Omit<typeof React, keyof typeof overrides>
 
 const ReactMemo: Hidden & typeof overrides = React as never
 
