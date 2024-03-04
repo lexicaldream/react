@@ -2,6 +2,8 @@
   description = "Safer React types";
 
   inputs = {
+    soap.url = "github:jedahu/soap";
+
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
     devenv.url = "github:cachix/devenv";
     nix2container.url = "github:nlewo/nix2container";
@@ -20,9 +22,9 @@
     extra-substituters = "https://devenv.cachix.org";
   };
 
-  outputs = inputs@{ flake-parts, dream2nix, ... }:
+  outputs = inputs@{ flake-parts, dream2nix, devenv, soap, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [ inputs.devenv.flakeModule ];
+      imports = [ soap.flakeModules.typescript devenv.flakeModule ];
       systems = [
         "x86_64-linux"
         "i686-linux"
@@ -32,58 +34,24 @@
       ];
 
       perSystem = { config, self', inputs', pkgs, system, ... }: {
-        # Per-system attributes can be defined here. The self' and inputs'
-        # module parameters provide easy access to attributes of the same
-        # system.
-
-        # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
-        packages.default = dream2nix.lib.evalModules {
-          packageSets.nixpkgs =
-            inputs.dream2nix.inputs.nixpkgs.legacyPackages.${system};
-          packageSets.extra = { inherit (inputs) gitignore; };
-          modules = [
-            ./default.nix
-            {
-              paths = {
-                projectRoot = ./.;
-                projectRootFile = "flake.nix";
-                package = ./.;
-              };
-            }
-          ];
+        soap.typescript.project = {
+          name = "safer-react";
+          version = "0.1.0";
+          dependencyOverrides = { };
+          paths = {
+            projectRoot = ./.;
+            projectRootFile = "flake.nix";
+            package = ./.;
+          };
         };
 
         devenv.shells.default = {
-          name = "my-project";
+          enterShell = ''
+            echo Hello
+          '';
 
-          imports = [
-            # This is just like the imports in devenv.nix.
-            # See https://devenv.sh/guides/using-with-flake-parts/#import-a-devenv-module
-            # ./devenv-foo.nix
-          ];
-
-          languages = {
-            javascript.enable = true;
-            typescript.enable = true;
-          };
-
-          pre-commit = {
-            hooks = {
-              eslint.enable = true;
-              nixfmt.enable = true;
-              prettier.enable = true;
-            };
-            settings = { eslint.extensions = "\\.tsx?$"; };
-          };
-
-          packages = with pkgs; [ nodePackages.prettier nodePackages.eslint ];
+          pre-commit.hooks.tsc.enable = true;
         };
-
-      };
-      flake = {
-        # The usual flake attributes can be defined here, including system-
-        # agnostic ones like nixosModule and system-enumerating ones, although
-        # those are more easily expressed in perSystem.
 
       };
     };

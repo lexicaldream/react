@@ -29,14 +29,11 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: ['@typescript-eslint', 'react'],
-  ignorePatterns: ['dist/*'],
+  ignorePatterns: ['dist/*', '.*'],
   rules: {
-    'react-hooks/exhaustive-deps': [
-      'error',
-      {
-        additionalHooks: ''
-      }
-    ]
+    'react-hooks/exhaustive-deps': ['error', { additionalHooks: '' }],
+    '@typescript-eslint/array-type': ['error', { default: 'generic' }],
+    '@typescript-eslint/consistent-type-definitions': 'off'
   },
   settings: {
     react: {

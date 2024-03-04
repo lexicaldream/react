@@ -1,48 +1,47 @@
 // -*- mode: jsonc; -*-
 {
   "compilerOptions": {
-    "composite": true,
-    "strict": true,
-    // Strict checks
-    "alwaysStrict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "useUnknownInCatchVariables": true,
-    "strictPropertyInitialization": true,
-    "strictFunctionTypes": true,
-    "noImplicitThis": true,
-    "strictBindCallApply": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    // Linter Checks
-    "noImplicitReturns": true,
-    "noImplicitOverride": true,
-    "forceConsistentCasingInFileNames": true,
-    // https://eslint.org/docs/rules/consistent-return ?
-    "noFallthroughCasesInSwitch": true,
-    // https://eslint.org/docs/rules/no-fallthrough
-    "noUnusedLocals": true,
-    // https://eslint.org/docs/rules/no-unused-vars
-    "noUnusedParameters": true,
-    // https://eslint.org/docs/rules/no-unused-vars#args
     "allowUnreachableCode": false,
-    // https://eslint.org/docs/rules/no-unreachable ?
     "allowUnusedLabels": false,
-    // https://eslint.org/docs/rules/no-unused-labels
-    // Base Strict Checks
+    "alwaysStrict": true,
+    "composite": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["ESNext", "dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
     "noImplicitUseStrict": false,
+    "noPropertyAccessFromIndexSignature": true,
+    "noStrictGenericChecks": false,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "dist",
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
     "suppressExcessPropertyErrors": false,
     "suppressImplicitAnyIndexErrors": false,
-    "noStrictGenericChecks": false,
-
     "target": "es6",
-    "module": "es2015",
-    "lib": ["ESNext", "dom"],
-    "moduleResolution": "node",
-    "outDir": "dist",
-    "declarationMap": true,
-    "esModuleInterop": true
+    "useUnknownInCatchVariables": true
+    // Base Strict Checks
+    // Linter Checks
+    // Strict checks
+    // https://eslint.org/docs/rules/consistent-return ?
+    // https://eslint.org/docs/rules/no-fallthrough
+    // https://eslint.org/docs/rules/no-unreachable ?
+    // https://eslint.org/docs/rules/no-unused-labels
+    // https://eslint.org/docs/rules/no-unused-vars
+    // https://eslint.org/docs/rules/no-unused-vars#args
   },
   "include": ["*.ts"]
 }

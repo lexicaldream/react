@@ -1,5 +1,6 @@
 .DS_Store
 .devenv
+.pre-commit-config.yaml
 node_modules
 result
 tsconfig.tsbuildinfo
