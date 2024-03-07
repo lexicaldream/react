@@ -2,29 +2,34 @@
   description = "Safer React types";
 
   inputs = {
+    nixpkgs.url = "nixpkgs";
+
     soap.url = "github:jedahu/soap";
 
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
-    devenv.url = "github:cachix/devenv";
-    nix2container.url = "github:nlewo/nix2container";
-    nix2container.inputs.nixpkgs.follows = "nixpkgs";
-    mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
-    dream2nix.url = "github:nix-community/dream2nix";
-    gitignore = {
-      url = "github:hercules-ci/gitignore.nix";
+    devenv.follows = "soap/devenv";
+    dream2nix.follows = "soap/dream2nix";
+
+    nix-github-actions = {
+      url = "github:nix-community/nix-github-actions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
   nixConfig = {
-    extra-trusted-public-keys =
-      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
+    extra-trusted-public-keys = "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
     extra-substituters = "https://devenv.cachix.org";
   };
 
-  outputs = inputs@{ flake-parts, dream2nix, devenv, soap, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [ soap.flakeModules.typescript devenv.flakeModule ];
+  outputs = inputs @ {
+    flake-parts,
+    dream2nix,
+    devenv,
+    soap,
+    nix-github-actions,
+    ...
+  }:
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [soap.flakeModules.typescript];
       systems = [
         "x86_64-linux"
         "i686-linux"
@@ -33,11 +38,18 @@
         "aarch64-darwin"
       ];
 
-      perSystem = { config, self', inputs', pkgs, system, ... }: {
-        soap.typescript.project = {
+      perSystem = {
+        config,
+        self',
+        inputs',
+        pkgs,
+        system,
+        ...
+      }: {
+        soap.typescript.projects.default = {
           name = "safer-react";
           version = "0.1.0";
-          dependencyOverrides = { };
+          packages = pkgs // {inherit (pkgs.nodePackages) eslint prettier;};
           paths = {
             projectRoot = ./.;
             projectRootFile = "flake.nix";
@@ -45,14 +57,19 @@
           };
         };
 
-        devenv.shells.default = {
-          enterShell = ''
-            echo Hello
-          '';
-
-          pre-commit.hooks.tsc.enable = true;
+        packages.default = soap.lib.typescript.evalModules config.soap.typescript.projects.default {
+          packageSets = {nixpkgs = inputs.nixpkgs.legacyPackages.${system};};
+          modules = [
+            soap.lib.typescript.dreamModule
+          ];
         };
 
+        devenv.shells.default = {
+          pre-commit.hooks.tsc.enable = true;
+        };
+      };
+
+      flake = {
       };
     };
 }
