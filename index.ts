@@ -7,9 +7,9 @@ import React, {
   SetStateAction
 } from 'react'
 
-import { MemoBrand, Memo } from './memo'
+import { MemoBrand, Memo, type Primitive } from './memo'
 
-type DependencyList = Array<{ [MemoBrand]: unknown }>
+type DependencyList = Array<Primitive | { [MemoBrand]: unknown }>
 
 type Overrides = {
   useMemo: <A>(f: () => A, dependencies: DependencyList) => Memo<A>

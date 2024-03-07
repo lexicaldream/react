@@ -1,4 +1,11 @@
-type Primitive = bigint | boolean | null | number | string | symbol | undefined
+export type Primitive =
+  | bigint
+  | boolean
+  | null
+  | number
+  | string
+  | symbol
+  | undefined
 export declare const MemoBrand: unique symbol
 export type Memo<A> = A & {
   [MemoBrand]: A
@@ -26,5 +33,4 @@ export type Omems<
 > = {
   [K in keyof A]: Omem<A[K]>
 }
-export {}
 //# sourceMappingURL=memo.d.ts.map
