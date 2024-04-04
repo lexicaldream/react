@@ -4,39 +4,25 @@
   inputs = {
     nixpkgs.url = "nixpkgs";
 
-    soap.url = "github:jedahu/soap";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    devenv.follows = "soap/devenv";
-    dream2nix.follows = "soap/dream2nix";
-
-    nix-github-actions = {
-      url = "github:nix-community/nix-github-actions";
+    alejandra = {
+      url = "github:kamadorueda/alejandra/3.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  nixConfig = {
-    extra-trusted-public-keys = "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
-    extra-substituters = "https://devenv.cachix.org";
-  };
-
   outputs = inputs @ {
+    nixpkgs,
     flake-parts,
-    dream2nix,
-    devenv,
-    soap,
-    nix-github-actions,
+    alejandra,
     ...
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
-      imports = [soap.flakeModules.typescript];
-      systems = [
-        "x86_64-linux"
-        "i686-linux"
-        "x86_64-darwin"
-        "aarch64-linux"
-        "aarch64-darwin"
-      ];
+      systems = nixpkgs.lib.systems.flakeExposed;
 
       perSystem = {
         config,
@@ -46,30 +32,13 @@
         system,
         ...
       }: {
-        soap.typescript.projects.default = {
-          name = "safer-react";
-          version = "0.1.0";
-          packages = pkgs // {inherit (pkgs.nodePackages) eslint prettier;};
-          paths = {
-            projectRoot = ./.;
-            projectRootFile = "flake.nix";
-            package = ./.;
-          };
-        };
+        devShells.default = pkgs.mkShell {
+          buildInputs = with pkgs; [nodejs git alejandra.packages.${system}.default];
 
-        packages.default = soap.lib.typescript.evalModules config.soap.typescript.projects.default {
-          packageSets = {nixpkgs = inputs.nixpkgs.legacyPackages.${system};};
-          modules = [
-            soap.lib.typescript.dreamModule
-          ];
+          shellHook = ''
+            export PATH="$PWD/node_modules/.bin:$PATH"
+          '';
         };
-
-        devenv.shells.default = {
-          pre-commit.hooks.tsc.enable = true;
-        };
-      };
-
-      flake = {
       };
     };
 }

@@ -34,6 +34,7 @@
 #     "any.go":
 #       runner: go run
 
+assert_lefthook_installed: true
 pre-commit:
   piped: true
   commands:
@@ -42,14 +43,21 @@ pre-commit:
       stage_fixed: true
       priority: 1
     prettier:
+      glob: '*.{js,ts,jsx,tsx}'
       run: prettier --write {staged_files}
       stage_fixed: true
       priority: 2
-    eslint:
-      glob: '*.ts'
-      run: eslint {staged_files}
+    alejandra:
+      glob: '*.nix'
+      run: alejandra {staged_files}
+      stage_fixed: true
       priority: 3
+    eslint:
+      glob: '*.{ts,tsx}'
+      exclude: 'lib/.*'
+      run: eslint {staged_files}
+      priority: 4
     link:
       tags: local
       run: npm link
-      priority: 4
+      priority: 5
