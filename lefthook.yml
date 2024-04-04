@@ -59,5 +59,10 @@ pre-commit:
       priority: 4
     link:
       tags: local
-      run: mkdir -p link && (git ls-files ':(glob)*' | xargs -I '{}' cp '{}' link/) && cd link && npm link
+      run: |
+        rm -r link
+        mkdir -p link
+        git ls-tree --name-only $(git write-tree) . | xargs -I '{}' cp -r '{}' link/
+        cd link
+        npm link
       priority: 5
