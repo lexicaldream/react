@@ -4,7 +4,7 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
-    "composite": true,
+        "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
     "exactOptionalPropertyTypes": true,
@@ -32,15 +32,6 @@
     "suppressImplicitAnyIndexErrors": false,
     "target": "es6",
     "useUnknownInCatchVariables": true
-    // Base Strict Checks
-    // Linter Checks
-    // Strict checks
-    // https://eslint.org/docs/rules/consistent-return ?
-    // https://eslint.org/docs/rules/no-fallthrough
-    // https://eslint.org/docs/rules/no-unreachable ?
-    // https://eslint.org/docs/rules/no-unused-labels
-    // https://eslint.org/docs/rules/no-unused-vars
-    // https://eslint.org/docs/rules/no-unused-vars#args
   },
-  "include": ["*.ts"]
+  "include": ["src/*.ts"]
 }
