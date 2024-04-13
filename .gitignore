@@ -6,6 +6,7 @@
 .envrc
 .link
 .projectile
+lib
 node_modules
 result
 tsconfig.tsbuildinfo
