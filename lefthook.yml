@@ -26,7 +26,6 @@ pre-commit:
         rm -r .link
         mkdir .link
         npm pack 2>/dev/null | xargs tar -x -C .link --strip-components=1 -f
-        git ls-tree --name-only $(git write-tree) . | xargs -I '{}' cp -r '{}' .link/
       priority: 90
       only:
         - run: test "${PACK_LINK}"
