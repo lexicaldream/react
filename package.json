@@ -1,9 +1,16 @@
 {
   "name": "@lexicaldream/react",
-  "description": "React wrapper with safer types",
   "version": "0.1.0",
-  "main": "lib/index.js",
+  "description": "React wrapper with safer types",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lexicaldream/react"
+  },
+  "browser": "lib/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    "./": "./lib/"
+  },
   "peerDependencies": {
     "react": "^18.2.0"
   },

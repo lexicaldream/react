@@ -4,7 +4,7 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
-        "declaration": true,
+    "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
     "exactOptionalPropertyTypes": true,
@@ -33,5 +33,5 @@
     "target": "es6",
     "useUnknownInCatchVariables": true
   },
-  "include": ["src/*.ts"]
+  "include": ["src"]
 }

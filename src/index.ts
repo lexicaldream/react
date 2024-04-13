@@ -7,7 +7,9 @@ import React, {
   SetStateAction
 } from 'react'
 
-import { MemoBrand, Memo, type Primitive } from './memo'
+import { MemoBrand, Memo } from './memo'
+
+type Primitive = bigint | boolean | null | number | string | symbol | undefined
 
 type DependencyList = Array<Primitive | { [MemoBrand]: unknown }>
 
