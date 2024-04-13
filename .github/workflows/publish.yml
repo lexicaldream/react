@@ -17,8 +17,9 @@ jobs:
           flakes-from-devshell: true
           script: |
             ci-test
-  build:
+  publish:
     needs: test
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
