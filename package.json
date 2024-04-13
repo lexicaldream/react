@@ -9,7 +9,14 @@
   "browser": "lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
-    "./": "./lib/"
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    },
+    "./memo": {
+      "types": "./lib/memo.d.ts",
+      "import": "./lib/memo.js"
+    }
   },
   "peerDependencies": {
     "react": "^18.2.0"
