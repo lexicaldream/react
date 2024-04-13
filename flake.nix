@@ -25,7 +25,8 @@
         system,
         ...
       }:
-        with builtins; with pkgs; let
+        with builtins;
+        with pkgs; let
           fmt = config.treefmt.build.programs;
           devInputs = [nodejs git typescript fmt.alejandra fmt.prettier];
           npmrc = writeText ".npmrc" ''
@@ -45,6 +46,13 @@
               text = ''
                 npm ci
                 build
+              '';
+            };
+            ci-test = writeShellApplication {
+              name = "ci-test";
+              runtimeInputs = devInputs ++ [ci-build];
+              text = ''
+                ci-build
               '';
             };
             ci-publish = writeShellApplication {
