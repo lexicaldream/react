@@ -1,11 +1,4 @@
-import React, {
-  Dispatch,
-  EffectCallback,
-  MutableRefObject,
-  Ref,
-  RefObject,
-  SetStateAction
-} from 'react'
+import * as R from 'react'
 
 import { MemoBrand, Memo } from './memo'
 
@@ -13,46 +6,48 @@ type Primitive = bigint | boolean | null | number | string | symbol | undefined
 
 type DependencyList = Array<Primitive | { [MemoBrand]: unknown }>
 
-type Overrides = {
-  useMemo: <A>(f: () => A, dependencies: DependencyList) => Memo<A>
+export const useMemo_: <A>(
+  f: () => A,
+  dependencies: DependencyList
+) => Memo<A> = R.useMemo as never
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  useCallback: <A extends Function>(
-    callback: A,
-    deps: DependencyList
-  ) => Memo<A>
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const useCallback_: <A extends Function>(
+  callback: A,
+  deps: DependencyList
+) => Memo<A> = R.useCallback as never
 
-  useEffect: (f: EffectCallback, deps?: DependencyList) => void
+export const useEffect_: (f: R.EffectCallback, deps?: DependencyList) => void =
+  R.useEffect as never
 
-  useLayoutEffect: (f: EffectCallback, deps?: DependencyList) => void
+export const useLayoutEffect_: (
+  f: R.EffectCallback,
+  deps?: DependencyList
+) => void = R.useLayoutEffect as never
 
-  useImperativeHandle: <T, R extends T>(
-    ref: Ref<T> | undefined,
-    init: () => R,
-    deps?: DependencyList
-  ) => void
+export const useImperativeHandle_: <T, R extends T>(
+  ref: R.Ref<T> | undefined,
+  init: () => R,
+  deps?: DependencyList
+) => void = R.useImperativeHandle
 
-  useInsertionEffect: (effect: EffectCallback, deps?: DependencyList) => void
+export const useInsertionEffect_: (
+  effect: R.EffectCallback,
+  deps?: DependencyList
+) => void = R.useInsertionEffect as never
 
-  useState: {
-    <S>(
-      initialState: S | (() => S)
-    ): [Memo<S>, Memo<Dispatch<SetStateAction<S>>>]
-    <S = undefined>(): [
-      Memo<S | undefined>,
-      Memo<Dispatch<SetStateAction<S | undefined>>>
-    ]
-  }
+export const useState_: {
+  <S>(
+    initialState: S | (() => S)
+  ): [Memo<S>, Memo<R.Dispatch<R.SetStateAction<S>>>]
+  <S = undefined>(): [
+    Memo<S | undefined>,
+    Memo<R.Dispatch<R.SetStateAction<S | undefined>>>
+  ]
+} = R.useState as never
 
-  useRef: {
-    <T>(initialValue: T): Memo<MutableRefObject<T>>
-    <T>(initialValue: T | null): Memo<RefObject<T>>
-    <T = undefined>(): Memo<MutableRefObject<T | undefined>>
-  }
-}
-
-type Hidden = Omit<typeof React, keyof Overrides>
-
-const ReactMemo: Hidden & Overrides = React as never
-
-export = ReactMemo
+export const useRef_: {
+  <T>(initialValue: T): Memo<R.MutableRefObject<T>>
+  <T>(initialValue: T | null): Memo<R.RefObject<T>>
+  <T = undefined>(): Memo<R.MutableRefObject<T | undefined>>
+} = R.useRef as never
