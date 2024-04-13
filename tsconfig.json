@@ -10,7 +10,7 @@
     "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["ESNext", "dom"],
-    "module": "commonjs",
+    "module": "nodenext",
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitOverride": true,
@@ -32,6 +32,7 @@
     "suppressImplicitAnyIndexErrors": false,
     "target": "es6",
     "useUnknownInCatchVariables": true
+
   },
   "include": ["src"]
 }
