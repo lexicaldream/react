@@ -12,11 +12,8 @@ jobs:
         with:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-      - uses: workflow/nix-shell-action@v3
-        with:
-          flakes-from-devshell: true
-          script: |
-            ci-test
+      - run: nix develop --command ci-test
+
   publish:
     needs: test
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
@@ -28,10 +25,6 @@ jobs:
         with:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-      - uses: workflow/nix-shell-action@v3
+      - run: nix develop --command ci-publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        with:
-          flakes-from-devshell: true
-          script: |
-            ci-publish
