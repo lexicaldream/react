@@ -78,20 +78,29 @@ export type Delay<A extends R.ElementType> = {
   (): R.ReactNode
 }
 
-export { createElement as h } from 'react'
+export const h = <A extends R.ElementType>(
+  cmp: A,
+  props: R.ComponentPropsWithRef<A>,
+  ...children: Array<R.ReactNode | Delay<R.ElementType>>
+): R.ReactNode =>
+  R.createElement(
+    cmp,
+    props,
+    ...children.map(c => (typeof c === 'function' ? c() : c))
+  )
 
 export const h_ = <A extends R.ElementType>(
   cmp: A,
   props: R.ComponentPropsWithRef<A>,
-  ...children: Array<R.ReactNode>
+  ...children: Array<R.ReactNode | Delay<R.ElementType>>
 ): Delay<A> => {
   const go = (
     props: R.ComponentPropsWithRef<A>,
-    ...children: Array<R.ReactNode>
+    ...children: Array<R.ReactNode | Delay<R.ElementType>>
   ): Delay<A> =>
     ((p: Partial<R.ComponentPropsWithRef<A>>, ...cs: Array<R.ReactNode>) =>
       p === undefined && cs.length === 0
-        ? R.createElement(cmp, props, ...children)
+        ? h(cmp, props, ...children)
         : h_(cmp, { ...props, ...p }, ...children, ...cs)) as never
   return go(props, ...children)
 }
