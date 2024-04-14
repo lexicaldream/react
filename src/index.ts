@@ -22,52 +22,6 @@ export type UnMemos<A extends Record<PropertyKey, { [MemoBrand]: unknown }>> = {
   [K in keyof A]: UnMemo<A[K]>
 }
 
-export { createElement as h } from 'react'
-
-export const h_: {
-  (
-    type: 'input',
-    ...children: Array<R.ReactNode>
-  ): R.DetailedReactHTMLElement<
-    R.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  >
-
-  <P extends R.HTMLAttributes<T>, T extends HTMLElement>(
-    type: keyof R.ReactHTML,
-    ...children: Array<R.ReactNode>
-  ): R.DetailedReactHTMLElement<P, T>
-
-  (type: keyof R.ReactSVG, ...children: Array<R.ReactNode>): R.ReactSVGElement
-
-  <P extends R.DOMAttributes<T>, T extends Element>(
-    type: string,
-    ...children: Array<R.ReactNode>
-  ): R.DOMElement<P, T>
-
-  // Custom components
-
-  (
-    type: R.FunctionComponent,
-    ...children: Array<R.ReactNode>
-  ): R.FunctionComponentElement<object>
-
-  <
-    P extends object,
-    T extends R.Component<P, R.ComponentState>,
-    C extends R.ComponentClass<P>
-  >(
-    type: R.ClassType<P, T, C>,
-    ...children: Array<R.ReactNode>
-  ): R.CElement<P, T>
-
-  (
-    type: R.FunctionComponent | R.ComponentClass | string,
-    ...children: Array<R.ReactNode>
-  ): R.ReactElement
-} = ((elem: string, ...children: Array<R.ReactNode>) =>
-  R.createElement(elem, {}, ...children)) as never
-
 export const mem = <A>(a: A): Memo<A> => a as Memo<A>
 
 export const useMemo_: <A>(
@@ -115,3 +69,29 @@ export const useRef_: {
   <T>(initialValue: T | null): Memo<R.RefObject<T>>
   <T = undefined>(): Memo<R.MutableRefObject<T | undefined>>
 } = R.useRef as never
+
+export type Delay<A extends R.ElementType> = {
+  (
+    props: Partial<R.ComponentPropsWithRef<A>>,
+    ...children: Array<R.ReactNode>
+  ): Delay<A>
+  (): R.ReactNode
+}
+
+export { createElement as h } from 'react'
+
+export const h_ = <A extends R.ElementType>(
+  cmp: A,
+  props: R.ComponentPropsWithRef<A>,
+  ...children: Array<R.ReactNode>
+): Delay<A> => {
+  const go = (
+    props: R.ComponentPropsWithRef<A>,
+    ...children: Array<R.ReactNode>
+  ): Delay<A> =>
+    ((p: Partial<R.ComponentPropsWithRef<A>>, ...cs: Array<R.ReactNode>) =>
+      p === undefined && cs.length === 0
+        ? R.createElement(cmp, props, ...children)
+        : h_(cmp, { ...props, ...p }, ...children, ...cs)) as never
+  return go(props, ...children)
+}
