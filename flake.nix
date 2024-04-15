@@ -28,7 +28,7 @@
         with builtins;
         with pkgs; let
           fmt = config.treefmt.build.programs;
-          devInputs = [nodejs git typescript fmt.alejandra fmt.prettier];
+          devInputs = [nodejs git fmt.alejandra fmt.prettier];
           npmrc = writeText ".npmrc" ''
             //registry.npmjs.org/:_authToken=$${NODE_AUTH_TOKEN}
             registry=https://registry.npmjs.org/
