@@ -69,38 +69,3 @@ export const useRef_: {
   <T>(initialValue: T | null): Memo<R.RefObject<T>>
   <T = undefined>(): Memo<R.MutableRefObject<T | undefined>>
 } = R.useRef as never
-
-export type Delay<A extends R.ElementType> = {
-  (
-    props: Partial<R.ComponentPropsWithRef<A>>,
-    ...children: Array<R.ReactNode>
-  ): Delay<A>
-  (): R.ReactNode
-}
-
-export const h = <A extends R.ElementType>(
-  cmp: A,
-  props: R.ComponentPropsWithRef<A>,
-  ...children: Array<R.ReactNode | Delay<R.ElementType>>
-): R.ReactNode =>
-  R.createElement(
-    cmp,
-    props,
-    ...children.map(c => (typeof c === 'function' ? c() : c))
-  )
-
-export const h_ = <A extends R.ElementType>(
-  cmp: A,
-  props: R.ComponentPropsWithRef<A>,
-  ...children: Array<R.ReactNode | Delay<R.ElementType>>
-): Delay<A> => {
-  const go = (
-    props: R.ComponentPropsWithRef<A>,
-    ...children: Array<R.ReactNode | Delay<R.ElementType>>
-  ): Delay<A> =>
-    ((p: Partial<R.ComponentPropsWithRef<A>>, ...cs: Array<R.ReactNode>) =>
-      p === undefined && cs.length === 0
-        ? h(cmp, props, ...children)
-        : h_(cmp, { ...props, ...p }, ...children, ...cs)) as never
-  return go(props, ...children)
-}

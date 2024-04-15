@@ -35,24 +35,41 @@
             always-auth=true
           '';
           commands = rec {
-            build = writeShellApplication {
-              name = "build";
+            l-build = writeShellApplication {
+              name = "l-build";
               runtimeInputs = devInputs;
               text = "tsc";
             };
+            l-test = writeShellApplication {
+              name = "l-test";
+              runtimeInputs = devInputs;
+              text = ''
+                node --import tsx --test src/**/__test__.ts
+              '';
+            };
+            l-publish = writeShellApplication {
+              name = "l-publish";
+              runtimeInputs = devInputs ++ [l-build l-test];
+              text = ''
+                l-build
+                l-test
+                npm publish --access public
+              '';
+            };
             ci-build = writeShellApplication {
               name = "ci-build";
-              runtimeInputs = devInputs ++ [build];
+              runtimeInputs = devInputs;
               text = ''
                 npm ci
-                build
+                tsc
               '';
             };
             ci-test = writeShellApplication {
               name = "ci-test";
-              runtimeInputs = devInputs ++ [ci-build];
+              runtimeInputs = devInputs ++ [ci-build l-test];
               text = ''
                 ci-build
+                l-test
               '';
             };
             ci-publish = writeShellApplication {

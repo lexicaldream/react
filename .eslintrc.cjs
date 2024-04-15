@@ -33,7 +33,18 @@ module.exports = {
   rules: {
     'react-hooks/exhaustive-deps': ['error', { additionalHooks: '' }],
     '@typescript-eslint/array-type': ['error', { default: 'generic' }],
-    '@typescript-eslint/consistent-type-definitions': 'off'
+    '@typescript-eslint/consistent-type-definitions': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        args: 'all',
+        argsIgnorePattern: '^_',
+        caughtErrors: 'all',
+        caughtErrorsIgnorePattern: '^_',
+        destructuredArrayIgnorePattern: '^_',
+        varsIgnorePattern: '^_'
+      }
+    ]
   },
   settings: {
     react: {
