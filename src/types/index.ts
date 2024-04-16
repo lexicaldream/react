@@ -99,3 +99,6 @@ export type Expect<T extends true> = T
 export type Eq<A, B> = [A] extends [B] ? ([B] extends [A] ? true : '!>') : '!<'
 
 export type Extends<A, B> = [A] extends [B] ? true : '!<'
+
+// From https://stackoverflow.com/a/56620917
+export type Exactly<T, U> = T & Record<Exclude<keyof U, keyof T>, never>

@@ -55,6 +55,13 @@
                 exit "$result"
               '';
             };
+            l-tsd-watch = writeShellApplication {
+              name = "l-tsd-watch";
+              runtimeInputs = devInputs;
+              text = ''
+                node --watch-path src ./node_modules/tsd/dist/cli.js --files src
+              '';
+            };
             l-publish = writeShellApplication {
               name = "l-publish";
               runtimeInputs = devInputs ++ [l-build l-test];

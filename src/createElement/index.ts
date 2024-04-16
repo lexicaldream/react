@@ -1,5 +1,5 @@
 import * as R from 'react'
-import { ChildrenProp, ReactChildrenProp } from '../types'
+import { ReactChildrenProp } from '../types'
 
 type CreateElement = {
   (
@@ -34,11 +34,6 @@ type CreateElement = {
     props: R.Attributes & P
   ): R.FunctionComponentElement<P>
 
-  <P extends ChildrenProp>(
-    type: R.FunctionComponent<P>,
-    props: R.Attributes & P
-  ): R.FunctionComponentElement<P>
-
   <
     P extends object,
     T extends R.Component<P, R.ComponentState>,
@@ -48,21 +43,7 @@ type CreateElement = {
     props: R.ClassAttributes<T> & P
   ): R.CElement<P, T>
 
-  <
-    P extends ChildrenProp,
-    T extends R.Component<P, R.ComponentState>,
-    C extends R.ComponentClass<P>
-  >(
-    type: R.ClassType<P, T, C>,
-    props: R.ClassAttributes<T> & P
-  ): R.CElement<P, T>
-
   <P extends object>(
-    type: R.FunctionComponent<P> | R.ComponentClass<P>,
-    props: R.Attributes & P
-  ): R.ReactElement<P>
-
-  <P extends ChildrenProp>(
     type: R.FunctionComponent<P> | R.ComponentClass<P>,
     props: R.Attributes & P
   ): R.ReactElement<P>

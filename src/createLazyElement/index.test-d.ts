@@ -1,4 +1,4 @@
-import { expectType, expectError, expectAssignable, printType } from 'tsd'
+import { expectType, expectError, expectAssignable } from 'tsd'
 import * as R from 'react'
 import { createLazyElement } from './index'
 import { LazyElement, RequiredKeys } from './LazyElement'

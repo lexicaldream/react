@@ -1,14 +1,17 @@
 import * as R from 'react'
 import { createElement } from '../createElement'
-import { ChildrenProp, ReactChildrenProp } from '../types'
+import { Exactly, ReactChildrenProp } from '../types'
 import { LazyElement } from './LazyElement'
 
 type CreateLazyElement = {
   <
-    SuppliedProps extends Partial<
-      R.InputHTMLAttributes<HTMLInputElement> &
-        R.ClassAttributes<HTMLInputElement> &
-        ReactChildrenProp
+    SuppliedProps extends Exactly<
+      Partial<
+        R.InputHTMLAttributes<HTMLInputElement> &
+          R.ClassAttributes<HTMLInputElement> &
+          ReactChildrenProp
+      >,
+      SuppliedProps
     >
   >(
     type: 'input',
@@ -26,8 +29,9 @@ type CreateLazyElement = {
 
   <
     Props extends R.HTMLAttributes<T>,
-    SuppliedProps extends Partial<
-      R.ClassAttributes<T> & Props & ReactChildrenProp
+    SuppliedProps extends Exactly<
+      Partial<R.ClassAttributes<T> & Props & ReactChildrenProp>,
+      SuppliedProps
     >,
     T extends HTMLElement
   >(
@@ -41,8 +45,9 @@ type CreateLazyElement = {
 
   <
     Props extends R.SVGAttributes<T>,
-    SuppliedProps extends Partial<
-      R.ClassAttributes<T> & Props & ReactChildrenProp
+    SuppliedProps extends Exactly<
+      Partial<R.ClassAttributes<T> & Props & ReactChildrenProp>,
+      SuppliedProps
     >,
     T extends SVGElement
   >(
@@ -56,8 +61,9 @@ type CreateLazyElement = {
 
   <
     Props extends R.DOMAttributes<T>,
-    SuppliedProps extends Partial<
-      R.ClassAttributes<T> & Props & ReactChildrenProp
+    SuppliedProps extends Exactly<
+      Partial<R.ClassAttributes<T> & Props & ReactChildrenProp>,
+      SuppliedProps
     >,
     T extends Element
   >(
@@ -71,18 +77,9 @@ type CreateLazyElement = {
 
   // Custom components
 
-  <Props extends object, SuppliedProps extends Partial<R.Attributes & Props>>(
-    type: R.FunctionComponent<Props>,
-    props: SuppliedProps
-  ): LazyElement<
-    R.FunctionComponentElement<Props>,
-    R.Attributes & Props,
-    SuppliedProps
-  >
-
   <
-    Props extends ChildrenProp,
-    SuppliedProps extends Partial<R.Attributes & Props>
+    Props extends object,
+    SuppliedProps extends Exactly<Partial<R.Attributes & Props>, SuppliedProps>
   >(
     type: R.FunctionComponent<Props>,
     props: SuppliedProps
@@ -94,7 +91,10 @@ type CreateLazyElement = {
 
   <
     Props extends object,
-    SuppliedProps extends Partial<R.ClassAttributes<T> & Props>,
+    SuppliedProps extends Exactly<
+      Partial<R.ClassAttributes<T> & Props>,
+      SuppliedProps
+    >,
     T extends R.Component<Props, R.ComponentState>,
     C extends R.ComponentClass<Props>
   >(
@@ -107,27 +107,8 @@ type CreateLazyElement = {
   >
 
   <
-    Props extends ChildrenProp,
-    SuppliedProps extends Partial<R.ClassAttributes<T> & Props>,
-    T extends R.Component<Props, R.ComponentState>,
-    C extends R.ComponentClass<Props>
-  >(
-    type: R.ClassType<Props, T, C>,
-    props: SuppliedProps
-  ): LazyElement<
-    R.CElement<Props, T>,
-    R.ClassAttributes<T> & Props,
-    SuppliedProps
-  >
-
-  <Props extends object, SuppliedProps extends Partial<R.Attributes & Props>>(
-    type: R.FunctionComponent<Props> | R.ComponentClass<Props>,
-    props: SuppliedProps
-  ): LazyElement<R.ReactElement<Props>, R.Attributes & Props, SuppliedProps>
-
-  <
-    Props extends ChildrenProp,
-    SuppliedProps extends Partial<R.Attributes & Props>
+    Props extends object,
+    SuppliedProps extends Exactly<Partial<R.Attributes & Props>, SuppliedProps>
   >(
     type: R.FunctionComponent<Props> | R.ComponentClass<Props>,
     props: SuppliedProps
