@@ -32,7 +32,7 @@
     "suppressImplicitAnyIndexErrors": false,
     "target": "es6",
     "useUnknownInCatchVariables": true
-
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["**/*.test-d.ts"]
 }

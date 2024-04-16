@@ -29,7 +29,7 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: ['@typescript-eslint', 'react'],
-  ignorePatterns: ['lib/*', '.*'],
+  ignorePatterns: ['lib/*', '.*', '*.test-d.ts'],
   rules: {
     'react-hooks/exhaustive-deps': ['error', { additionalHooks: '' }],
     '@typescript-eslint/array-type': ['error', { default: 'generic' }],

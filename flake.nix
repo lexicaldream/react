@@ -44,7 +44,15 @@
               name = "l-test";
               runtimeInputs = devInputs;
               text = ''
+                set +o errexit
+
+                result=0
+                trap 'result=1' ERR
+
+                tsd --files src
                 node --import tsx --test src/**/__test__.ts
+
+                exit "$result"
               '';
             };
             l-publish = writeShellApplication {
