@@ -1,6 +1,6 @@
 import { expectType, expectError } from 'tsd'
 import * as R from 'react'
-import { createElement_ } from './index'
+import { createElement } from './index'
 
 // # Required props
 
@@ -12,22 +12,22 @@ declare const ComponentWithRequiredProps: (
 
 // All required props supplied
 expectType<R.FunctionComponentElement<ComponentWithRequiredProps>>(
-  createElement_(ComponentWithRequiredProps, { reqA: 'a' })
+  createElement(ComponentWithRequiredProps, { reqA: 'a' })
 )
 
 // Required prop is missing
 expectError(
-  createElement_(ComponentWithRequiredProps, { requiredPropIsMissing: 'x' })
+  createElement(ComponentWithRequiredProps, { requiredPropIsMissing: 'x' })
 )
 
 // Extra prop supplied
 expectError(
-  createElement_(ComponentWithRequiredProps, { reqA: 'a', extraProp: 'b' })
+  createElement(ComponentWithRequiredProps, { reqA: 'a', extraProp: 'b' })
 )
 
 // Unwanted children supplied
 expectError(
-  createElement_(ComponentWithRequiredProps, { reqA: 'a', children: ['b'] })
+  createElement(ComponentWithRequiredProps, { reqA: 'a', children: ['b'] })
 )
 
 // # Optional props
@@ -40,21 +40,30 @@ declare const ComponentWithOptionalProps: (
 
 // No props supplied
 expectType<R.FunctionComponentElement<ComponentWithOptionalProps>>(
-  createElement_(ComponentWithOptionalProps, {})
+  createElement(ComponentWithOptionalProps, {})
 )
 
 // All props supplied
 expectType<R.FunctionComponentElement<ComponentWithOptionalProps>>(
-  createElement_(ComponentWithOptionalProps, { optA: 'a' })
+  createElement(ComponentWithOptionalProps, { optA: 'a' })
 )
 
 // Extra prop supplied
-expectError(createElement_(ComponentWithOptionalProps, { extraProp: 'x' }))
+expectError(createElement(ComponentWithOptionalProps, { extraProp: 'x' }))
 
 // Unwanted children supplied
-expectError(createElement_(ComponentWithOptionalProps, { children: ['a'] }))
+expectError(createElement(ComponentWithOptionalProps, { children: ['a'] }))
 
 // # Children
+
+// ## Builtin children handling
+
+// Iterable children elements without keys
+expectError(
+  createElement('div', {
+    children: [[R.createElement('div', {}), R.createElement('div', {})]]
+  })
+)
 
 // ## "Normal" child array
 
@@ -66,26 +75,26 @@ declare const ComponentWithChildren: (
 
 // Children supplied
 expectType<R.FunctionComponentElement<ComponentWithChildren>>(
-  createElement_(ComponentWithChildren, {
+  createElement(ComponentWithChildren, {
     children: ['a', 'b']
   })
 )
 
 // Empty children supplied
 expectType<R.FunctionComponentElement<ComponentWithChildren>>(
-  createElement_(ComponentWithChildren, {
+  createElement(ComponentWithChildren, {
     children: []
   })
 )
 
 // Children missing
-expectError(createElement_(ComponentWithChildren, {}))
+expectError(createElement(ComponentWithChildren, {}))
 
 // Children malformed
-expectError(createElement_(ComponentWithChildren, { children: 'not an array' }))
+expectError(createElement(ComponentWithChildren, { children: 'not an array' }))
 
 // Children maltyped
-expectError(createElement_(ComponentWithChildren, { children: [new Date()] }))
+expectError(createElement(ComponentWithChildren, { children: [new Date()] }))
 
 // ## Tuple children
 
@@ -97,21 +106,21 @@ declare const ComponentWithChildrenTuple: (
 
 // Children supplied
 expectType<R.FunctionComponentElement<ComponentWithChildrenTuple>>(
-  createElement_(ComponentWithChildrenTuple, {
+  createElement(ComponentWithChildrenTuple, {
     children: [1, 'a']
   })
 )
 
 // Extra children supplied
 expectError(
-  createElement_(ComponentWithChildrenTuple, {
+  createElement(ComponentWithChildrenTuple, {
     children: [1, 'a', 'b']
   })
 )
 
 // Not enough children supplied
 expectError(
-  createElement_(ComponentWithChildrenTuple, {
+  createElement(ComponentWithChildrenTuple, {
     children: [1]
   })
 )

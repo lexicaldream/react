@@ -1,12 +1,74 @@
 import * as R from 'react'
 
-export type SomeNode =
-  | R.ReactElement
-  | string
-  | number
-  | Iterable<SomeNode>
-  | R.ReactPortal
-  | boolean
+// const mapIterable = <A, B>(
+//   iterable: Iterable<A>,
+//   f: (a: A, i: number) => B
+// ): Iterable<B> => ({
+//   [Symbol.iterator]() {
+//     const iterator = iterable[Symbol.iterator]()
+//     let i = 0
+//     return {
+//       next() {
+//         const result = iterator.next()
+//         if (result.done) {
+//           return { done: true, value: undefined }
+//         }
+//         return { done: false, value: f(result.value, i++) }
+//       }
+//     }
+//   }
+// })
+
+// class KeyedList<A extends KeysafeNode> implements Iterable<A> {
+//   constructor(readonly keyedChildren: Iterable<[string, A]>) {}
+
+//   [Symbol.iterator](): Iterator<A, unknown, undefined> {
+//     return mapIterable(this.keyedChildren, ([key, a]) =>
+//       typeof a === 'string' ||
+//       typeof a === 'number' ||
+//       typeof a === 'boolean' ||
+//       a instanceof KeyedList ||
+//       a === null ||
+//       a === undefined
+//         ? a
+//         : (R.cloneElement(a, { key }) as A)
+//     )[Symbol.iterator]()
+//   }
+// }
+
+export type PrimitiveNode = boolean | number | string
+export type NullishNode = undefined | null
+export type NullablePrimitiveNode = PrimitiveNode | NullishNode
+
+export type ElementNode = R.ReactElement | R.ReactPortal
+
+export interface KeyedElement<
+  P = unknown,
+  T extends string | R.JSXElementConstructor<unknown> =
+    | string
+    | R.JSXElementConstructor<unknown>
+> extends R.ReactElement<P, T> {
+  key: string
+}
+
+export interface KeyedPortal extends R.ReactPortal {
+  key: string
+}
+
+export type SomeNode = PrimitiveNode | ElementNode | Iterable<SomeNode>
+
+export type KeyedNode =
+  | NullishNode
+  | PrimitiveNode
+  | KeyedElement
+  | KeyedPortal
+  | Iterable<KeyedNode>
+
+export type ChildNode =
+  | NullishNode
+  | PrimitiveNode
+  | ElementNode
+  | Iterable<KeyedNode>
 
 export type Simplify<A> = {
   [K in keyof A]: A[K]
@@ -14,9 +76,15 @@ export type Simplify<A> = {
   ? B
   : never
 
-export type ReactChildrenProp = {
+export type UnsafeReactChildrenProp = {
   readonly children?: ReadonlyArray<R.ReactNode>
 }
+
+export type KeysafeReactChildrenProp = {
+  readonly children?: ReadonlyArray<ChildNode>
+}
+
+export type ReactChildrenProp = KeysafeReactChildrenProp
 
 export type ChildrenProp = {
   readonly children?: ReadonlyArray<unknown>

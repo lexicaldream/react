@@ -1,2 +1,2 @@
-export { createElement_ as h } from '../createElement'
-export { createLazyElement_ as h_ } from '../createLazyElement'
+export { createElement as h } from '../createElement'
+export { createLazyElement as h_ } from '../createLazyElement'

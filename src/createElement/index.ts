@@ -58,15 +58,15 @@ type CreateElement = {
   ): R.CElement<P, T>
 
   <P extends object>(
-    type: R.FunctionComponent<P> | R.ComponentClass<P> | string,
+    type: R.FunctionComponent<P> | R.ComponentClass<P>,
     props: R.Attributes & P
   ): R.ReactElement<P>
 
   <P extends ChildrenProp>(
-    type: R.FunctionComponent<P> | R.ComponentClass<P> | string,
+    type: R.FunctionComponent<P> | R.ComponentClass<P>,
     props: R.Attributes & P
   ): R.ReactElement<P>
 }
 
-export const createElement_: CreateElement = ((type: string, props: object) =>
+export const createElement: CreateElement = ((type: string, props: object) =>
   R.createElement(type, props)) as never

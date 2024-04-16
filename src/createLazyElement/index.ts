@@ -1,7 +1,7 @@
 import * as R from 'react'
-import { LazyElement } from './LazyElement'
+import { createElement } from '../createElement'
 import { ChildrenProp, ReactChildrenProp } from '../types'
-import { createElement_ } from '../createElement'
+import { LazyElement } from './LazyElement'
 
 type CreateLazyElement = {
   <
@@ -121,7 +121,7 @@ type CreateLazyElement = {
   >
 
   <Props extends object, SuppliedProps extends Partial<R.Attributes & Props>>(
-    type: R.FunctionComponent<Props> | R.ComponentClass<Props> | string,
+    type: R.FunctionComponent<Props> | R.ComponentClass<Props>,
     props: SuppliedProps
   ): LazyElement<R.ReactElement<Props>, R.Attributes & Props, SuppliedProps>
 
@@ -129,21 +129,19 @@ type CreateLazyElement = {
     Props extends ChildrenProp,
     SuppliedProps extends Partial<R.Attributes & Props>
   >(
-    type: R.FunctionComponent<Props> | R.ComponentClass<Props> | string,
+    type: R.FunctionComponent<Props> | R.ComponentClass<Props>,
     props: SuppliedProps
   ): LazyElement<R.ReactElement<Props>, R.Attributes & Props, SuppliedProps>
 }
 
-export const createLazyElement_: CreateLazyElement = ((
+export const createLazyElement: CreateLazyElement = ((
     type: string,
     props: object
   ) =>
   (p: object | ((p: object) => object)) =>
-    /* eslint-disable */
     p === undefined
-      ? createElement_(type, props)
-      : createLazyElement_(
-          type as any,
-          typeof p === 'function' ? p(props) : { ...props, ...p }
-          /* eslint-enable */
+      ? createElement(type, props)
+      : createLazyElement(
+          type,
+          (typeof p === 'function' ? p(props) : { ...props, ...p }) as object
         )) as never

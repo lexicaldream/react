@@ -1,6 +1,6 @@
-import { expectType, expectError, expectAssignable } from 'tsd'
+import { expectType, expectError, expectAssignable, printType } from 'tsd'
 import * as R from 'react'
-import { createLazyElement_ } from './index'
+import { createLazyElement } from './index'
 import { LazyElement, RequiredKeys } from './LazyElement'
 
 // # Required props
@@ -16,7 +16,7 @@ declare const Component: (props: Props) => R.ReactNode
 
 // All props supplied
 if (true) {
-  const e = createLazyElement_(Component, {
+  const e = createLazyElement(Component, {
     req: 'a',
     req1: 'b',
     opt: 1,
@@ -32,7 +32,7 @@ if (true) {
 
 // Prop is missing
 if (true) {
-  const e = createLazyElement_(Component, { opt: 1, children: ['x'] })
+  const e = createLazyElement(Component, { opt: 1, children: ['x'] })
 
   expectAssignable<
     LazyElement<
@@ -47,7 +47,7 @@ if (true) {
 
 // Prop added
 if (true) {
-  const e = createLazyElement_(Component, { opt: 1, children: ['x'] })({
+  const e = createLazyElement(Component, { opt: 1, children: ['x'] })({
     req: 'a'
   })
 
@@ -77,17 +77,17 @@ expectAssignable<
     }
   >
 >(
-  createLazyElement_(Component, { opt: 1, children: ['x'] })(p => ({
+  createLazyElement(Component, { opt: 1, children: ['x'] })(p => ({
     ...p,
     children: [...p.children, 'x']
   }))
 )
 
 // Extra prop supplied
-expectError(createLazyElement_(Component, { opt: 1, extra: 'b' }))
+expectError(createLazyElement(Component, { opt: 1, extra: 'b' }))
 
 // Extra prop supplied solo
-expectError(createLazyElement_(Component, { extra: 'b' }))
+expectError(createLazyElement(Component, { extra: 'b' }))
 
 // Attempt to render without required prop
 expectAssignable<
@@ -96,11 +96,11 @@ expectAssignable<
     Props,
     { opt: number; children: ReadonlyArray<R.ReactNode> }
   >
->(createLazyElement_(Component, { opt: 1, children: ['x'] })())
+>(createLazyElement(Component, { opt: 1, children: ['x'] })())
 
 // Render with supplied required props
 expectType<R.FunctionComponentElement<Props>>(
-  createLazyElement_(Component, { req: 'a', req1: 'b' })()
+  createLazyElement(Component, { req: 'a', req1: 'b' })()
 )
 
 // # Optional props
@@ -118,7 +118,7 @@ expectType<
     ComponentWithOptionalProps,
     {}
   >
->(createLazyElement_(ComponentWithOptionalProps, {}))
+>(createLazyElement(ComponentWithOptionalProps, {}))
 
 // All props supplied
 expectType<
@@ -127,10 +127,10 @@ expectType<
     ComponentWithOptionalProps,
     { optA: string }
   >
->(createLazyElement_(ComponentWithOptionalProps, { optA: 'a' }))
+>(createLazyElement(ComponentWithOptionalProps, { optA: 'a' }))
 
 // Extra prop supplied
-expectError(createLazyElement_(ComponentWithOptionalProps, { extraProp: 'x' }))
+expectError(createLazyElement(ComponentWithOptionalProps, { extraProp: 'x' }))
 
 // Unwanted children supplied
-expectError(createLazyElement_(ComponentWithOptionalProps, { children: ['a'] }))
+expectError(createLazyElement(ComponentWithOptionalProps, { children: ['a'] }))
